@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kupu Photobooth - 3 Grid IG Story</title>
+    <title>LKMM-TM ITS 2026 Memorie</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -20,7 +20,7 @@
     <header class="main-header" style="justify-content: center; width: auto; max-width: fit-content; padding: 12px 30px; margin: 16px auto 0;">
         <div class="logo">
             <span class="logo-icon">🦋</span>
-            <span>Kupu Photobooth</span>
+            <span>LKMM-TM ITS 2026 Memorie</span>
         </div>
     </header>
 
@@ -96,7 +96,7 @@
                         </div>
 
                         <!-- bottom caption text watermark -->
-                        <div class="strip-watermark" id="strip-watermark-text">KUPU MEMORIES</div>
+                        <div class="strip-watermark" id="strip-watermark-text">LKMM-TM ITS Jejak 2026</div>
                     </div>
                 </div>
 
@@ -149,11 +149,14 @@
                         </div>
                     </div>
 
-                    <!-- Section 3: Watermark Caption -->
+                    <!-- Section 3: Watermark Caption Selection -->
                     <div class="panel-section">
-                        <h3 class="panel-title"><span>✍️</span> Teks Watermark</h3>
-                        <div class="watermark-input-group">
-                            <input type="text" class="watermark-input" id="watermark-text-input" value="KUPU MEMORIES" maxlength="25" placeholder="Tulis caption-mu...">
+                        <h3 class="panel-title"><span>✍️</span> Pilihan Watermark</h3>
+                        <div class="template-picker-grid" id="watermark-picker-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%;">
+                            <button class="retake-btn active" style="padding: 10px; font-size: 0.85rem; width: 100%; margin: 0; justify-content: center; border-radius: 12px; cursor: none;" data-watermark="jejak">Jejak</button>
+                            <button class="retake-btn" style="padding: 10px; font-size: 0.85rem; width: 100%; margin: 0; justify-content: center; border-radius: 12px; cursor: none;" data-watermark="optimis">Optimis</button>
+                            <button class="retake-btn" style="padding: 10px; font-size: 0.85rem; width: 100%; margin: 0; justify-content: center; border-radius: 12px; cursor: none;" data-watermark="menangis">Menangis</button>
+                            <button class="retake-btn" style="padding: 10px; font-size: 0.85rem; width: 100%; margin: 0; justify-content: center; border-radius: 12px; cursor: none;" data-watermark="bismillah">Bismillah</button>
                         </div>
                     </div>
 
@@ -182,7 +185,7 @@
 
     <!-- MAIN APPLICATION FOOTER -->
     <footer class="main-footer">
-        <div class="footer-text">KUPU PHOTOBOOTH © 2026 • CREATED WITH LOVE</div>
+        <div class="footer-text">LKMM-TM ITS 2026 MEMORIE • CREATED WITH LOVE</div>
     </footer>
 
     <!-- LOGIC SCRIPT -->

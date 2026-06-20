@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Editor Page Elements
     const photostripPreview = document.getElementById("photostrip-preview");
     const stickerWorkspace = document.getElementById("sticker-workspace");
-    const watermarkTextInput = document.getElementById("watermark-text-input");
+    const watermarkPickerButtons = document.querySelectorAll("#watermark-picker-grid button");
     const stripWatermarkText = document.getElementById("strip-watermark-text");
     const downloadCollageBtn = document.getElementById("download-collage-btn");
     const retakePhotosBtn = document.getElementById("retake-photos-btn");
@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let capturedPhotos = []; // Holds data URLs of the 3 photos
     let currentFilter = "normal";
     let currentTemplateId = "classic-white";
-    let watermarkText = "KUPU MEMORIES";
+    let watermarkText = "LKMM-TM ITS Jejak 2026";
     let bgMusicPlaying = false;
     let isCapturing = false;
 
@@ -580,11 +580,22 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         // --- WATERMARK CAPTION ---
-        watermarkTextInput.addEventListener("input", () => {
-            let val = watermarkTextInput.value.trim().toUpperCase();
-            if (val === "") val = "KUPU MEMORIES";
-            watermarkText = val;
-            stripWatermarkText.innerText = val;
+        const watermarkPhrases = {
+            jejak: "LKMM-TM ITS Jejak 2026",
+            optimis: "Optimis Lulus #TesTulisJejak",
+            menangis: "Saya Mengaku Kalah Telak #TesTulisJejak",
+            bismillah: "Jujur Gatau, Yaudahlah #TesTulisJejak"
+        };
+
+        watermarkPickerButtons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                watermarkPickerButtons.forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+
+                const type = btn.getAttribute("data-watermark");
+                watermarkText = watermarkPhrases[type] || watermarkPhrases.jejak;
+                stripWatermarkText.innerText = watermarkText;
+            });
         });
 
         // --- EXPORT & RESET BUTTONS ---
@@ -751,7 +762,18 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.save();
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.font = "bold 44px 'Lora', serif";
+        
+        let fontSize = 44;
+        ctx.font = `bold ${fontSize}px 'Lora', serif`;
+        let textWidth = ctx.measureText(watermarkText).width;
+        
+        // Auto scale down font size if the text exceeds maximum boundaries
+        const maxTextWidth = 840; 
+        if (textWidth > maxTextWidth) {
+            fontSize = Math.floor(fontSize * (maxTextWidth / textWidth));
+            ctx.font = `bold ${fontSize}px 'Lora', serif`;
+        }
+        
         ctx.fillStyle = textColor;
         ctx.fillText(watermarkText, 1080 / 2, 1835);
         ctx.restore();
