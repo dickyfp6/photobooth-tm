@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kupu Photobooth - 3 Grid IG Story</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- CUSTOM BUTTERFLY CURSOR -->
+    <div class="butterfly-cursor" id="butterfly-cursor"></div>
+
+    <!-- FLOATING BACKGROUND DECORATIONS -->
+    <div class="butterfly-bg-container" id="butterfly-bg-container">
+        <!-- Generated dynamically in JavaScript for organic placement -->
+    </div>
+
+    <!-- APPLICATION HEADER (Centered & simplified, no nav buttons) -->
+    <header class="main-header" style="justify-content: center; width: auto; max-width: fit-content; padding: 12px 30px; margin: 16px auto 0;">
+        <div class="logo">
+            <span class="logo-icon">🦋</span>
+            <span>Kupu Photobooth</span>
+        </div>
+    </header>
+
+    <!-- MAIN APP WRAPPER -->
+    <main>
+
+        <!-- SCREEN 1: LIVE CAMERA CAPTURE (Direct Boot Start Page) -->
+        <section class="app-screen active" id="screen-camera">
+            <div class="content-box camera-container">
+                <h2>Siap-siap Bergaya! ✨</h2>
+                <p class="text-muted">Kamera akan mengambil 3 foto secara bergantian. Ikuti hitung mundur di layar.</p>
+
+                <!-- Video viewport in landscape layout -->
+                <div class="camera-preview-wrapper">
+                    <!-- HTML5 Live Video stream -->
+                    <video class="camera-video" id="camera-video" autoplay playsinline muted></video>
+
+                    <!-- Camera overlay overlays -->
+                    <div class="camera-overlay">
+                        <div class="camera-header-info">
+                            <span class="photo-take-indicator" id="take-indicator">Foto 1 dari 3</span>
+                            <span class="photo-ratio-badge">Lanskap</span>
+                        </div>
+                        <div class="camera-grid-lines">
+                            <div class="camera-grid-section"></div>
+                            <div class="camera-grid-section"></div>
+                            <div class="camera-grid-section"></div>
+                        </div>
+                    </div>
+
+                    <!-- Countdown overlay indicator -->
+                    <div class="countdown-overlay" id="countdown-overlay">
+                        <div class="countdown-number" id="countdown-number">3</div>
+                    </div>
+
+                    <!-- Visual shutter flash animation -->
+                    <div class="flash-effect" id="flash-effect"></div>
+                </div>
+
+                <!-- Thumbnail progress row -->
+                <div class="camera-thumbnails-container">
+                    <div class="thumb-preview" id="thumb-0" data-index="1"></div>
+                    <div class="thumb-preview" id="thumb-1" data-index="2"></div>
+                    <div class="thumb-preview" id="thumb-2" data-index="3"></div>
+                </div>
+
+                <!-- Control buttons -->
+                <div class="camera-controls">
+                    <button class="capture-btn" id="trigger-capture-btn" title="Ambil Foto Sekarang"></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCREEN 2: EDIT & CUSTOMIZE STYLES -->
+        <section class="app-screen" id="screen-editor">
+            <div class="editor-layout">
+                
+                <!-- Left panel: Live 9:16 Photostrip Preview -->
+                <div class="preview-container">
+                    <!-- The photostrip collage markup -->
+                    <div class="photostrip-wrapper" id="photostrip-preview">
+                        
+                        <!-- Predefined decorative overlays (Not user-draggable) -->
+                        <div class="sticker-workspace" id="sticker-workspace" style="pointer-events: none;">
+                            <!-- Template decorations dynamically spawned here -->
+                        </div>
+
+                        <!-- 3 captured photos vertical stack -->
+                        <div class="photostrip-grid">
+                            <div class="strip-item" id="strip-photo-0"></div>
+                            <div class="strip-item" id="strip-photo-1"></div>
+                            <div class="strip-item" id="strip-photo-2"></div>
+                        </div>
+
+                        <!-- bottom caption text watermark -->
+                        <div class="strip-watermark" id="strip-watermark-text">KUPU MEMORIES</div>
+                    </div>
+                </div>
+
+                <!-- Right panel: Customizer Sidebar Settings -->
+                <div class="editor-panel">
+                    
+                    <!-- Section 1: Predefined Frame Designs -->
+                    <div class="panel-section">
+                        <h3 class="panel-title"><span>🎨</span> Pilih Desain Frame</h3>
+                        <div class="template-picker-grid" id="template-picker-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%;">
+                            <button class="retake-btn active" style="padding: 10px; font-size: 0.85rem; width: 100%; margin: 0; justify-content: center; border-radius: 12px; cursor: none;" data-template="classic-white">Putih Klasik</button>
+                            <button class="retake-btn" style="padding: 10px; font-size: 0.85rem; width: 100%; margin: 0; justify-content: center; border-radius: 12px; cursor: none;" data-template="pink-butterfly">Kupu Pink</button>
+                            <button class="retake-btn" style="padding: 10px; font-size: 0.85rem; width: 100%; margin: 0; justify-content: center; border-radius: 12px; cursor: none;" data-template="lavender-dream">Mimpi Lavender</button>
+                            <button class="retake-btn" style="padding: 10px; font-size: 0.85rem; width: 100%; margin: 0; justify-content: center; border-radius: 12px; cursor: none;" data-template="midnight-star">Bintang Malam</button>
+                            <button class="retake-btn" style="padding: 10px; font-size: 0.85rem; width: 100%; margin: 0; justify-content: center; border-radius: 12px; cursor: none;" data-template="hologram-flow">Kupu Hologram</button>
+                            <button class="retake-btn" style="padding: 10px; font-size: 0.85rem; width: 100%; margin: 0; justify-content: center; border-radius: 12px; cursor: none;" data-template="retro-stamp">Persik Jadul</button>
+                            <button class="retake-btn" style="padding: 10px; font-size: 0.85rem; width: 100%; margin: 0; justify-content: center; border-radius: 12px; cursor: none;" data-template="mint-fresh">Daun Mint</button>
+                            <button class="retake-btn" style="padding: 10px; font-size: 0.85rem; width: 100%; margin: 0; justify-content: center; border-radius: 12px; cursor: none;" data-template="sunset-flight">Kupu Senja</button>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Photo Filters -->
+                    <div class="panel-section">
+                        <h3 class="panel-title"><span>📷</span> Efek Filter</h3>
+                        <div class="filter-selector-scroll">
+                            <button class="filter-option active" data-filter="normal">
+                                <div class="filter-thumb filter-normal" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;50&quot; height=&quot;50&quot;><rect width=&quot;50&quot; height=&quot;50&quot; fill=&quot;%23b06d6d&quot;/></svg>');"></div>
+                                <span class="filter-label">Asli</span>
+                            </button>
+                            <button class="filter-option" data-filter="grayscale">
+                                <div class="filter-thumb filter-grayscale" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;50&quot; height=&quot;50&quot;><rect width=&quot;50&quot; height=&quot;50&quot; fill=&quot;%23b06d6d&quot;/></svg>');"></div>
+                                <span class="filter-label">Hitam Putih</span>
+                            </button>
+                            <button class="filter-option" data-filter="sepia">
+                                <div class="filter-thumb filter-sepia" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;50&quot; height=&quot;50&quot;><rect width=&quot;50&quot; height=&quot;50&quot; fill=&quot;%23b06d6d&quot;/></svg>');"></div>
+                                <span class="filter-label">Sepia</span>
+                            </button>
+                            <button class="filter-option" data-filter="warm">
+                                <div class="filter-thumb filter-warm" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;50&quot; height=&quot;50&quot;><rect width=&quot;50&quot; height=&quot;50&quot; fill=&quot;%23b06d6d&quot;/></svg>');"></div>
+                                <span class="filter-label">Retro Warm</span>
+                            </button>
+                            <button class="filter-option" data-filter="cool">
+                                <div class="filter-thumb filter-cool" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;50&quot; height=&quot;50&quot;><rect width=&quot;50&quot; height=&quot;50&quot; fill=&quot;%23b06d6d&quot;/></svg>');"></div>
+                                <span class="filter-label">Cinematic</span>
+                            </button>
+                            <button class="filter-option" data-filter="contrast">
+                                <div class="filter-thumb filter-contrast" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;50&quot; height=&quot;50&quot;><rect width=&quot;50&quot; height=&quot;50&quot; fill=&quot;%23b06d6d&quot;/></svg>');"></div>
+                                <span class="filter-label">Glow</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Section 3: Watermark Caption -->
+                    <div class="panel-section">
+                        <h3 class="panel-title"><span>✍️</span> Teks Watermark</h3>
+                        <div class="watermark-input-group">
+                            <input type="text" class="watermark-input" id="watermark-text-input" value="KUPU MEMORIES" maxlength="25" placeholder="Tulis caption-mu...">
+                        </div>
+                    </div>
+
+                    <!-- Customizer Action Buttons -->
+                    <div class="editor-actions-row">
+                        <button class="retake-btn" id="retake-photos-btn" style="cursor: none;">
+                            <span>🔄</span> Foto Ulang
+                        </button>
+                        <button class="download-btn" id="download-collage-btn" style="cursor: none;">
+                            <span>📥</span> Unduh Story (PNG)
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- UTILITY CONTROL ELEMENTS -->
+    <button class="sound-toggle-btn" id="sound-toggle-btn" title="Nyalakan/Matikan Musik Latar" style="cursor: none;">
+        <span id="sound-icon">🔈</span>
+    </button>
+
+    <div class="status-toast" id="status-toast">Pesan status</div>
+
+    <!-- MAIN APPLICATION FOOTER -->
+    <footer class="main-footer">
+        <div class="footer-text">KUPU PHOTOBOOTH © 2026 • CREATED WITH LOVE</div>
+    </footer>
+
+    <!-- LOGIC SCRIPT -->
+    <script src="app.js"></script>
+</body>
+</html>
