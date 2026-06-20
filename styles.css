@@ -734,8 +734,8 @@ p{
 ========================================== */
 .editor-layout{
     display: grid;
-    grid-template-columns: 460px 1fr;
-    gap: 40px;
+    grid-template-columns: 500px 1fr;
+    gap: 50px;
     align-items: start;
 }
 
@@ -748,15 +748,15 @@ p{
 }
 
 .photostrip-wrapper {
-    width: 320px;
+    width: 440px;
     aspect-ratio: 9 / 16;
     background: #ffffff; /* Default background */
-    padding: 18px 18px 32px 18px; /* Bottom padding is larger for Polaroid look */
+    padding: 24px 24px 44px 24px; /* Bottom padding is larger for Polaroid look */
     border-radius: 0; /* Classic photostrip straight edges */
     box-shadow: var(--shadow-strong);
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
     position: relative;
     overflow: hidden;
     user-select: none;
@@ -768,7 +768,7 @@ p{
 .photostrip-grid{
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
     flex: 1;
 }
 
@@ -788,7 +788,7 @@ p{
 .strip-watermark {
     text-align: center;
     font-family: 'Lora', serif;
-    font-size: 0.95rem;
+    font-size: 1.3rem;
     font-weight: 700;
     color: var(--accent-dark);
     letter-spacing: 0.18em;

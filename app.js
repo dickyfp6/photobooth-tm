@@ -544,14 +544,15 @@ document.addEventListener("DOMContentLoaded", () => {
         // Draw template decorations overlay
         stickerWorkspace.innerHTML = "";
         if (template.decorations) {
+            const editorScale = 440 / 320;
             template.decorations.forEach(dec => {
                 const decSpan = document.createElement("span");
                 decSpan.innerText = dec.emoji;
                 decSpan.className = "placed-sticker";
-                decSpan.style.left = `${dec.x}px`;
-                decSpan.style.top = `${dec.y}px`;
+                decSpan.style.left = `${dec.x * editorScale}px`;
+                decSpan.style.top = `${dec.y * editorScale}px`;
                 decSpan.style.transform = `rotate(${dec.angle}deg)`;
-                decSpan.style.fontSize = `${38 * dec.scale}px`;
+                decSpan.style.fontSize = `${38 * dec.scale * editorScale}px`;
                 decSpan.style.pointerEvents = "none"; // Make non-draggable
                 stickerWorkspace.appendChild(decSpan);
             });
