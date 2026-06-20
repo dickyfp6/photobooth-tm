@@ -2,6 +2,10 @@
  * KUPU PHOTOBOOTH - 3 Grid IG Story App Logic
  */
 
+// WEB3FORMS ACCESS KEY CONFIGURATION
+// Silakan isi Access Key Web3Forms Anda di sini (Dapatkan gratis di https://web3forms.com/)
+const WEB3FORMS_ACCESS_KEY = "YOUR_ACCESS_KEY_HERE";
+
 document.addEventListener("DOMContentLoaded", () => {
     
     // ==========================================
@@ -30,6 +34,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const stripWatermarkText = document.getElementById("strip-watermark-text");
     const downloadCollageBtn = document.getElementById("download-collage-btn");
     const retakePhotosBtn = document.getElementById("retake-photos-btn");
+
+    // Email Modal Elements
+    const emailModal = document.getElementById("email-modal");
+    const closeEmailModalBtn = document.getElementById("close-email-modal-btn");
+    const recipientEmailInput = document.getElementById("recipient-email");
+    const sendEmailSubmitBtn = document.getElementById("send-email-submit-btn");
+    const emailStatusText = document.getElementById("email-status-text");
+    const emailKeyWarning = document.getElementById("email-key-warning");
 
     // Controls
     const toast = document.getElementById("status-toast");
@@ -501,7 +513,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // --- EXPORT & RESET BUTTONS ---
         downloadCollageBtn.addEventListener("click", () => {
-            exportStoryCollage();
+            emailModal.classList.add("show");
+            recipientEmailInput.value = "";
+            emailStatusText.style.display = "none";
+            sendEmailSubmitBtn.disabled = false;
+            sendEmailSubmitBtn.innerText = "Kirim Sekarang";
+            
+            if (WEB3FORMS_ACCESS_KEY === "YOUR_ACCESS_KEY_HERE" || !WEB3FORMS_ACCESS_KEY) {
+                emailKeyWarning.style.display = "block";
+            } else {
+                emailKeyWarning.style.display = "none";
+            }
+        });
+
+        // Close email modal
+        closeEmailModalBtn.addEventListener("click", () => {
+            emailModal.classList.remove("show");
+        });
+
+        // Submit email
+        sendEmailSubmitBtn.addEventListener("click", () => {
+            const emailAddress = recipientEmailInput.value.trim();
+            if (!emailAddress || !validateEmail(emailAddress)) {
+                showToast("Alamat email tidak valid!");
+                return;
+            }
+
+            if (WEB3FORMS_ACCESS_KEY === "YOUR_ACCESS_KEY_HERE" || !WEB3FORMS_ACCESS_KEY) {
+                showToast("Harap masukkan Access Key Web3Forms terlebih dahulu!");
+                return;
+            }
+
+            // Start sending flow
+            emailStatusText.innerText = "Sedang merender foto...";
+            emailStatusText.style.display = "block";
+            sendEmailSubmitBtn.disabled = true;
+            sendEmailSubmitBtn.innerText = "Mengirim...";
+
+            exportStoryCollage(emailAddress);
         });
 
         retakePhotosBtn.addEventListener("click", () => {
@@ -562,8 +611,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // ==========================================
     // 7. HIGH RES COLLAGE GENERATION & EXPORT (9:16)
     // ==========================================
-    function exportStoryCollage() {
-        showToast("Sedang merender foto...");
+    function exportStoryCollage(recipientEmail = null) {
+        if (!recipientEmail) {
+            showToast("Sedang merender foto...");
+        }
 
         const exportCanvas = document.createElement("canvas");
         const ctx = exportCanvas.getContext("2d");
@@ -624,7 +675,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (imagesLoaded === 3) {
                     drawWatermarkText(ctx, template.textColor);
                     drawTemplateDecorationsOnCanvas(ctx, template);
-                    triggerImageDownload(exportCanvas);
+                    
+                    if (recipientEmail) {
+                        sendEmailWithBlob(exportCanvas, recipientEmail);
+                    } else {
+                        triggerImageDownload(exportCanvas);
+                    }
                 }
             };
         }
@@ -721,6 +777,67 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.removeChild(link);
         
         showToast("Collage berhasil disimpan!");
+    }
+
+    // --- EMAIL COMPILER SUBMISSION (Web3Forms API Client) ---
+    function sendEmailWithBlob(canvas, email) {
+        emailStatusText.innerText = "Mempersiapkan gambar...";
+        
+        canvas.toBlob(async (blob) => {
+            const formData = new FormData();
+            formData.append("access_key", WEB3FORMS_ACCESS_KEY);
+            formData.append("email", email);
+            formData.append("subject", "LKMM-TM ITS 2026 Memorie - Foto Photobooth Anda 🦋");
+            formData.append("from_name", "LKMM-TM ITS 2026");
+            formData.append("message", "Terima kasih telah berpartisipasi dalam Tes Tulis LKMM-TM ITS 2026. Berikut terlampir hasil photostrip Anda.");
+            formData.append("attachment", blob, "lkmm-tm-memorie.png");
+
+            try {
+                emailStatusText.innerText = "Mengirim email via Web3Forms...";
+                const response = await fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    body: formData
+                });
+                
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    emailStatusText.innerText = "✅ Foto berhasil dikirim ke email Anda!";
+                    showToast("Terkirim ke email!");
+                    
+                    sendEmailSubmitBtn.disabled = false;
+                    sendEmailSubmitBtn.innerText = "Foto Baru (Selesai)";
+                    
+                    // Replace button click listener once sent to act as Selesai / reset
+                    const handleDone = () => {
+                        sendEmailSubmitBtn.removeEventListener("click", handleDone);
+                        emailModal.classList.remove("show");
+                        
+                        // Reset photos and restart camera loop
+                        stickerWorkspace.innerHTML = "";
+                        showScreen("screen-camera");
+                        startCamera();
+                    };
+                    
+                    // Temporary replace listener
+                    sendEmailSubmitBtn.addEventListener("click", handleDone, { once: true });
+                } else {
+                    console.error("Web3Forms submission error:", result);
+                    emailStatusText.innerText = `❌ Gagal: ${result.message || 'Error'}`;
+                    sendEmailSubmitBtn.disabled = false;
+                    sendEmailSubmitBtn.innerText = "Coba Kirim Lagi";
+                }
+            } catch (error) {
+                console.error("Email submission connection error:", error);
+                emailStatusText.innerText = "❌ Gagal: Masalah koneksi jaringan.";
+                sendEmailSubmitBtn.disabled = false;
+                sendEmailSubmitBtn.innerText = "Coba Kirim Lagi";
+            }
+        }, "image/png");
+    }
+
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
     }
 
     // ==========================================

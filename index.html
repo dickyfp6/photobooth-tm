@@ -158,7 +158,7 @@
                             <span>🔄</span> Foto Ulang
                         </button>
                         <button class="download-btn" id="download-collage-btn" style="cursor: none;">
-                            <span>📥</span> Unduh Story (PNG)
+                            <span>✉️</span> Kirim ke Email
                         </button>
                     </div>
                 </div>
@@ -171,6 +171,33 @@
     <!-- UTILITY CONTROL ELEMENTS -->
 
     <div class="status-toast" id="status-toast">Pesan status</div>
+
+    <!-- EMAIL SUBMISSION MODAL -->
+    <div class="announcement-modal" id="email-modal">
+        <div class="announcement-modal-card" style="width: min(460px, 100%); padding: 32px 24px; border-radius: 28px; text-align: center;">
+            <button class="announcement-modal-close" id="close-email-modal-btn">×</button>
+            <span style="font-size: 3rem; display: block; margin-bottom: 12px;">✉️</span>
+            <h3 style="margin-bottom: 12px; font-family: 'Lora', serif; color: var(--accent-dark);">Kirim Foto ke Email</h3>
+            <p style="font-size: 0.95rem; margin-bottom: 24px; color: var(--muted); text-align: center;">Masukkan alamat email aktif Anda untuk mengirim berkas photostrip secara langsung.</p>
+            
+            <div style="width: 100%; text-align: left; margin-bottom: 20px;">
+                <label for="recipient-email" style="display: block; font-size: 0.85rem; font-weight: 600; color: var(--muted); margin-bottom: 8px;">Alamat Email</label>
+                <input type="email" id="recipient-email" class="watermark-input" style="width: 100%; border-radius: 12px; cursor: none;" placeholder="nama@email.com" required>
+            </div>
+
+            <!-- Notice when Access Key is empty -->
+            <div id="email-key-warning" style="display: none; background: rgba(220, 53, 69, 0.1); border: 1px solid rgba(220, 53, 69, 0.2); padding: 12px; border-radius: 12px; font-size: 0.85rem; color: #dc3545; margin-bottom: 20px; text-align: left;">
+                ⚠️ <strong>Perhatian:</strong> Harap masukkan Access Key Web3Forms Anda di baris pertama <code>app.js</code> terlebih dahulu agar pengiriman email berfungsi.
+            </div>
+
+            <!-- Loader / Status indicator -->
+            <div id="email-status-text" style="font-size: 0.95rem; margin-bottom: 20px; font-weight: 600; color: var(--accent-dark); display: none;">Mengirim email...</div>
+
+            <div style="display: flex; gap: 12px; width: 100%; justify-content: center; margin-top: 10px;">
+                <button class="download-btn" id="send-email-submit-btn" style="padding: 12px 24px; font-size: 0.95rem; width: 100%; margin: 0; cursor: none;">Kirim Sekarang</button>
+            </div>
+        </div>
+    </div>
 
     <!-- MAIN APPLICATION FOOTER -->
     <footer class="main-footer">
