@@ -32,8 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const retakePhotosBtn = document.getElementById("retake-photos-btn");
 
     // Controls
-    const soundToggleBtn = document.getElementById("sound-toggle-btn");
-    const soundIcon = document.getElementById("sound-icon");
     const toast = document.getElementById("status-toast");
 
     // ==========================================
@@ -157,12 +155,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentFilter = "normal";
     let currentTemplateId = "classic-white";
     let watermarkText = "LKMM-TM ITS Jejak 2026";
-    let bgMusicPlaying = false;
     let isCapturing = false;
-
     // Web Audio Synthesizer variables
     let audioCtx = null;
-    let musicInterval = null; // background music loop
 
     // Initializer
     init();
@@ -172,7 +167,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setupFloatingButterflies();
         setupCameraLogic();
         setupCustomizerLogic();
-        setupAudioLogic();
 
         // Boot directly to Camera Screen and initialize webcam
         showScreen("screen-camera");
@@ -250,25 +244,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // ==========================================
     // 4. AUDIO SYNTHESIZER (Web Audio API)
     // ==========================================
-    function setupAudioLogic() {
-        soundToggleBtn.addEventListener("click", () => {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            
-            if (bgMusicPlaying) {
-                bgMusicPlaying = false;
-                soundIcon.innerText = "🔈";
-                stopAmbientMusic();
-                showToast("Musik Latar Dimatikan");
-            } else {
-                bgMusicPlaying = true;
-                soundIcon.innerText = "🔊";
-                startAmbientMusic();
-                showToast("Musik Latar Dinyalakan");
-            }
-        });
-    }
 
     function playSynthBeep(frequency = 880, duration = 0.15) {
         if (!audioCtx) return;
@@ -320,81 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
         noiseNode.start();
     }
 
-    function startAmbientMusic() {
-        if (!audioCtx) return;
-        if (audioCtx.state === "suspended") audioCtx.resume();
 
-        const tempo = 120;
-        const beatDuration = 60 / tempo;
-        let step = 0;
-
-        const chords = [
-            [261.63, 329.63, 392.00, 493.88], // Cmaj7
-            [220.00, 261.63, 329.63, 392.00], // Am7
-            [174.61, 220.00, 261.63, 329.63], // Fmaj7
-            [196.00, 246.94, 293.66, 349.23]  // G7
-        ];
-
-        function playChord(chordNotes) {
-            if (!bgMusicPlaying) return;
-            
-            chordNotes.forEach((freq, idx) => {
-                const osc = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-
-                osc.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-
-                osc.type = "triangle";
-                osc.frequency.value = freq;
-
-                const startTime = audioCtx.currentTime + (idx * 0.05);
-                const holdTime = 3.5;
-
-                gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-                gainNode.gain.linearRampToValueAtTime(0.015, startTime + 0.2);
-                gainNode.gain.setValueAtTime(0.015, startTime + holdTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.0001, startTime + holdTime + 0.8);
-
-                osc.start(startTime);
-                osc.stop(startTime + holdTime + 1.0);
-            });
-        }
-
-        function playBeatStep() {
-            if (!bgMusicPlaying) return;
-            const chordIndex = Math.floor(step / 4) % chords.length;
-            
-            if (step % 4 === 0) {
-                playChord(chords[chordIndex]);
-            }
-
-            if (step % 4 === 2) {
-                const osc = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                osc.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                osc.type = "sine";
-                osc.frequency.value = chords[chordIndex][3] * 2;
-
-                gainNode.gain.setValueAtTime(0.004, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.5);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 1.6);
-            }
-
-            step++;
-        }
-
-        musicInterval = setInterval(playBeatStep, beatDuration * 1000);
-    }
-
-    function stopAmbientMusic() {
-        if (musicInterval) {
-            clearInterval(musicInterval);
-            musicInterval = null;
-        }
-    }
 
     // ==========================================
     // 5. CAMERA LOGIC & SEQUENCER (3 TAKES)
